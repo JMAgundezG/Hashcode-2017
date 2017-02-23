@@ -1,8 +1,23 @@
-class polla(object):
-    def __init__(self, pito, jaja):
-        self.pito = pito
-        self.jaja = jaja
+INFINITE_LATENCY = 501
+cache_size = None
 
 
-polla1 = polla("me la suda", "jaja")
-print(polla1.pito, polla1.jaja)
+class endpoint(object):
+    def __init__(self, datacenter_latencia, caches_latencia):
+        self.datacenter_latencia = datacenter_latencia
+        self.caches_latencia = caches_latencia
+
+
+class cache(object):
+    def __init__(self):
+        self.videos = []
+
+
+class request(object):
+    def __init__(self, times, endpoint_id, video_id):
+        self.times = times
+        self.endpoint_id = endpoint_id
+        self.video_id = video_id
+
+
+
