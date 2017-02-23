@@ -14,7 +14,11 @@ class Endpoint(object):
 class Cache(object):
     def __init__(self):
         self.videos = []
+        self.ocupado = 0
 
+    def subir_video(self, video_id):
+        self.videos.append(video_id)
+        self.ocupado += videos[video_id]
 
 
 class Request(object):
@@ -22,11 +26,6 @@ class Request(object):
         self.times = times
         self.endpoint_id = endpoint_id
         self.video_id = video_id
-
-# class Video(object):
-#     def __init__(self, id, size):
-#         self.id = id
-#         self.size = size
 
 
 def read_file(filename):
@@ -84,16 +83,21 @@ def write_output(filename):
 
 
 def process():
-    ultimo = 0
-    for cache in caches:
-        ocupado = cache_size
-        for video in range(ultimo, n_videos):
-            if videos[video] <= ocupado:
-                cache.videos.append(video)
-                ultimo = video
-                ocupado -= videos[video]
-            else:
-                break
+    videos_subido = []
+    sorted_requests = sorted(requests, key=lambda req: req.times, reverse=True)
+    for request in sorted_requests:
+        if request.video_id not in videos_subido:
+            mejor_hasta_ahora_l = INFINITE_LATENCY
+            mejor_hasta_ahora = -1
+            for i in range(len(endpoints[request.endpoint_id].caches_latencia)):
+                if endpoints[request.endpoint_id].caches_latencia[i] < mejor_hasta_ahora_l \
+                    and cache_size - caches[i].ocupado > videos[request.video_id]:
+                    mejor_hasta_ahora_l = endpoints[request.endpoint_id].caches_latencia[i]
+                    mejor_hasta_ahora = i
+            if mejor_hasta_ahora != -1:
+                caches[mejor_hasta_ahora].subir_video(request.video_id)
+                videos_subido.append(request.video_id)
+
 
 
 def main():
