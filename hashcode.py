@@ -1,19 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
 
 import sys
 
 INFINITE_LATENCY = 501
-cache_size = 0
-n_videos = 0
-n_endpoints = 0
-n_requests = 0
-n_caches = 0
-
-videos = []
-endpoints = []
-caches = []
-requests = []
 
 class Endpoint(object):
     def __init__(self, datacenter_latencia, caches_latencia):
@@ -33,8 +23,24 @@ class Request(object):
         self.endpoint_id = endpoint_id
         self.video_id = video_id
 
+# class Video(object):
+#     def __init__(self, id, size):
+#         self.id = id
+#         self.size = size
+
 
 def read_file(filename):
+    global cache_size
+    global n_videos
+    global n_endpoints
+    global n_requests
+    global n_caches
+
+    global videos
+    global endpoints
+    global caches
+    global requests
+
     with open(filename, 'r') as fin:
         n_videos, n_endpoints, n_requests, n_caches, cache_size = [
             int(x) for x in fin.readline().split()]
@@ -67,31 +73,33 @@ def caches_ocupadas():
     return count
 
 def write_output(filename):
+    ocupados = caches_ocupadas()
     with open(filename, 'w') as fout:
-        fout.write(str(caches_ocupadas()))
-        for i in range(n_caches):
+        fout.write(str(ocupados) + '\n')
+        for i in range(ocupados):
             cache_string = str(i)
-            for video in cache.videos:
+            for video in caches[i].videos:
                 cache_string += ' ' + str(video)
-            fout.write(cache_string)
+            fout.write(cache_string + '\n')
 
 
 def process():
+    ultimo = 0
     for cache in caches:
         ocupado = cache_size
-        for video in range(n_videos):
+        for video in range(ultimo, n_videos):
             if videos[video] <= ocupado:
                 cache.videos.append(video)
-                videos.pop(video)
+                ultimo = video
                 ocupado -= videos[video]
             else:
                 break
 
 
 def main():
-    read_file("me_at_the_zoo.in")
+    read_file(sys.argv[1])
     process()
-    write_output("me_at_the_zoo.out")
+    write_output(sys.argv[2])
 
 if __name__ == '__main__':
     main()
