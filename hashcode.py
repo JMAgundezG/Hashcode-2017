@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 
+import sys
+
 INFINITE_LATENCY = 501
 cache_size = 0
 n_videos = 0
@@ -74,8 +76,21 @@ def write_output(filename):
             fout.write(cache_string)
 
 
+def process():
+    for cache in caches:
+        ocupado = cache_size
+        for video in range(n_videos):
+            if videos[video] <= ocupado:
+                cache.videos.append(video)
+                videos.pop(video)
+                ocupado -= videos[video]
+            else:
+                break
+
+
 def main():
     read_file("me_at_the_zoo.in")
+    process()
     write_output("me_at_the_zoo.out")
 
 if __name__ == '__main__':
