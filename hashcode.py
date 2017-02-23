@@ -21,7 +21,3 @@ class request(object):
         self.times = times
         self.endpoint_id = endpoint_id
         self.video_id = video_id
-
-
-
->>>>>>> 7894362a8543dd5778f07f0dafd95e93966c773c
