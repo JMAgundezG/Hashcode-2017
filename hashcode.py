@@ -24,6 +24,7 @@ class cache(object):
         self.videos = []
 
 
+
 class request(object):
     def __init__(self, times, endpoint_id, video_id):
         self.times = times
@@ -53,6 +54,23 @@ def read_file(filename):
         for _ in range(n_requests):
             video_id, endpoint_id, n_peticiones = [int(x) for x in fin.readline().split()]
             requests.append(request(n_peticiones, endpoint_id, video_id))
+
+
+def caches_ocupadas():
+    count = 0
+    for cache in caches:
+        if len(cache.videos) != 0:
+            count += 1
+    return count
+
+def write_output(filename):
+    with open(filename, 'w') as fout:
+        fout.write(str(caches_ocupadas()))
+        for i in range(n_caches):
+            cache_string = str(i)
+            for video in cache.videos:
+                cache_string += ' ' + str(video)
+            fout.write(cache_string)
 
 
 def main():
