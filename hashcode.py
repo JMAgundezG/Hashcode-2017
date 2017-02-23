@@ -44,7 +44,7 @@ def read_file(filename):
         for _ in range(n_endpoints):
             dc_latency, n_caches_endpoint = [int(x) for x in fin.readline().split()]
             endpoint_caches = [INFINITE_LATENCY for x in range(n_caches)]
-            for _ range(n_caches_endpoint):
+            for _ in range(n_caches_endpoint):
                 i, latency = [int(x) for x in fin.readline().split()]
                 endpoint_caches[i] = latency
             endpoints.append(endpoint(dc_latency, endpoint_caches))
@@ -52,4 +52,11 @@ def read_file(filename):
         requests = []
         for _ in range(n_requests):
             video_id, endpoint_id, n_peticiones = [int(x) for x in fin.readline().split()]
-            requests.append(n_peticiones, endpoint_id, video_id)
+            requests.append(request(n_peticiones, endpoint_id, video_id))
+
+
+def main():
+    read_file("me_at_the_zoo.in")
+
+if __name__ == '__main__':
+    main()
