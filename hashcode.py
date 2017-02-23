@@ -2,30 +2,30 @@
 # -*- encoding: utf-8 -*-
 
 INFINITE_LATENCY = 501
-cache_size = None
-n_videos = None
-n_endpoints = None
-n_requests = None
-n_caches = None
+cache_size = 0
+n_videos = 0
+n_endpoints = 0
+n_requests = 0
+n_caches = 0
 
-videos = None
-endpoints = None
-caches = None
-requests = None
+videos = []
+endpoints = []
+caches = []
+requests = []
 
-class endpoint(object):
+class Endpoint(object):
     def __init__(self, datacenter_latencia, caches_latencia):
         self.datacenter_latencia = datacenter_latencia
         self.caches_latencia = caches_latencia
 
 
-class cache(object):
+class Cache(object):
     def __init__(self):
         self.videos = []
 
 
 
-class request(object):
+class Request(object):
     def __init__(self, times, endpoint_id, video_id):
         self.times = times
         self.endpoint_id = endpoint_id
@@ -39,7 +39,7 @@ def read_file(filename):
 
         videos = [int(v) for v in fin.readline().split()]
 
-        caches = [cache() for _ in range(n_caches)]
+        caches = [Cache() for x in range(n_caches)]
 
         endpoints = []
         for _ in range(n_endpoints):
@@ -48,12 +48,13 @@ def read_file(filename):
             for _ in range(n_caches_endpoint):
                 i, latency = [int(x) for x in fin.readline().split()]
                 endpoint_caches[i] = latency
-            endpoints.append(endpoint(dc_latency, endpoint_caches))
+            endpoints.append(Endpoint(dc_latency, endpoint_caches))
 
         requests = []
         for _ in range(n_requests):
             video_id, endpoint_id, n_peticiones = [int(x) for x in fin.readline().split()]
-            requests.append(request(n_peticiones, endpoint_id, video_id))
+            requests.append(Request(n_peticiones, endpoint_id, video_id))
+
 
 
 def caches_ocupadas():
@@ -75,6 +76,7 @@ def write_output(filename):
 
 def main():
     read_file("me_at_the_zoo.in")
+    write_output("me_at_the_zoo.out")
 
 if __name__ == '__main__':
     main()
