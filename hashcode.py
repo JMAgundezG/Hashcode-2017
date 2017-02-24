@@ -84,7 +84,7 @@ def write_output(filename):
 
 def process():
     videos_subido = []
-    sorted_requests = sorted(requests, key=lambda req: req.times, reverse=True)
+    sorted_requests = sorted(requests, key=lambda req: req.times * (endpoints[req.endpoint_id].datacenter_latencia - min(endpoints[req.endpoint_id].caches_latencia)), reverse=True)
     for request in sorted_requests:
         if request.video_id not in videos_subido:
             mejor_hasta_ahora_l = INFINITE_LATENCY
